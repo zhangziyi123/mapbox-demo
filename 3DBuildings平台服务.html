@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Display buildings in 3D</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoieWFuY29uZ3dlbiIsImEiOiJjaml4eWgxMnowNHY0M3BvMW96cDI1bWJ6In0.QA-bmCCquo-mziBfZ8KOIQ';
+var map = new mapboxgl.Map({
+    style: 'mapbox://styles/mapbox/light-v9',
+    center: [119.9702104045922, 30.547959060830195],
+    zoom: 15.5,
+    pitch: 45,
+    bearing: -17.6,
+    container: 'map'
+});
+
+// The 'building' layer in the mapbox-streets vector source contains building-height
+// data from OpenStreetMap.
+map.on('load', function() {
+    var staticToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOiI0ZmVlMTQ4NC01YjY1LTRmMDEtOWE5My02MGFjYzlmZGVkMzciLCJzY29wZSI6InVzZXJjZW50ZXJ0aGlyZC1wYXJ0eSx1c2VyY2VudGVycG9zdGRhdGEsdXNlcmNlbnRlcmdldGRhdGEsdXNlcmNlbnRlcmRlbGV0ZWRhdGEsdXNlcmNlbnRlcnB1dGRhdGEsc3Nvcm9sZWNvbnRyb2wsdXNlcmNlbnRlcmRlbGV0ZW1hcCx1c2VyY2VudGVyZ2V0bWFwLHVzZXJjZW50ZXJwdXRtYXAsdXNlcmNlbnRlcnBvc3RtYXAsdXNlcmNlbnRlcmdldGRhdGFzZXJ2aWNlLGluZm9mZWVkYmFjayxzc291c2VyY29udHJvbCx1c2VyY2VudGVyZGVsZXRlZGF0YXNlcnZpY2UsdXNlcmNlbnRlcnB1dGRhdGFzZXJ2aWNlLHVzZXJjZW50ZXJwb3N0ZGF0YXNlcnZpY2Usc3Nvc2NvcGVjb250cm9sLHJlc291cmNlLGluZm9vcmRlcm1hbmFnZSxzc29yZXNvdXJjZWNvbnRyb2wsaW5mb3BvcnRhbGJpZ25ld3MsaW5mb29yZGVyYXR0YWNobWVudCxpbmZvZmlsZXNlcnZpY2UsaW5mb3BvcnRhbHNjaGVkdWxlLGluZm9wb3J0YWxwb3N0cyxpbmZvcG9ydGFsbWVzc2FnZSxyZXBvcnRzZXJ2ZXIsaW5mb3BvcnRhbG5ld3MsaW5mb29yZGVybGVhdmV3b3JkLHNzb2FjY291bnRjb250cm9sIiwibm9kZSI6IjdkNzA0OGRhLTU4OGYtNDVkZC05NzFjLTFmOGFjYTVhMTRkNSIsImV4cHNlYyI6LTEsImlhdCI6MTU2MTQxMjQ5MX0.NxgzoyROuB88ybLO9aLnwY2MZ0aZ71lBG_sAH08iHrM";
+    var ZJGISLayerUrlVec = "http://47.97.19.153:8083/vectortiles/4fee1484-5b65-4f01-9a93-60acc9fded37/3dbuildtest/{z}/{x}/{y}.pbf" + "?access_token=" + staticToken
+
+    // 不同类型都的数据渲染方式不同，图层的元信息可以通过下面接口获取到
+    // proxyUrlVec + "/tilestats" + "?access_token=" + staticToken
+    map.on("load", function () {
+        map.addLayer({
+            'id': '3d_building_test',
+            'type': 'fill',	// 渲染方式根据原信息中的geometry字段值判断点可以用circle，线用line，面用file，下面都paint也要做响应的处理
+            'source': {
+                type: 'vector',
+                tiles: [ZJGISLayerUrlVec]
+                // url: ZJGISLayerUrlVec
+            },
+            'layout': {},
+            'paint': {
+                'fill-color': '#3388ff',
+                'fill-outline-color': '#3388ff'
+            },
+            'source-layer': '3d_building_test' // 这个对应原信息里面都layer字段
+        });
+    })
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MapBox加载wmts地图服务</title>
+    <script src='./mapbox/mapbox-gl.js'></script>
+    <link href='./mapbox/mapbox-gl.css' rel='stylesheet'/>
+    <style>
+        body{ margin:0; padding:0; }
+        #map{ position:absolute; top:0; bottom:0; width:100%; }
+        /*隐藏logo*/
+        .mapboxgl-ctrl.mapboxgl-ctrl-attrib{
+            display:none !important;
+        }
+        .mapboxgl-ctrl-logo{
+            display:none !important;
+        }
+    </style>
+</head>
+<body>
+<div id='map'></div>
+<script>
+    var proxyUrlVec = "http://112.124.97.99:8089/api/dynamic/4fee1484-5b65-4f01-9a93-60acc9fded37-xiaoxie/vectortiles/4fee1484-5b65-4f01-9a93-60acc9fded37/xiaoxie";
+    var staticToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOiI0ZmVlMTQ4NC01YjY1LTRmMDEtOWE5My02MGFjYzlmZGVkMzciLCJzY29wZSI6InVzZXJjZW50ZXJ0aGlyZC1wYXJ0eSx1c2VyY2VudGVycG9zdGRhdGEsdXNlcmNlbnRlcmdldGRhdGEsdXNlcmNlbnRlcmRlbGV0ZWRhdGEsdXNlcmNlbnRlcnB1dGRhdGEsc3Nvcm9sZWNvbnRyb2wsdXNlcmNlbnRlcmRlbGV0ZW1hcCx1c2VyY2VudGVyZ2V0bWFwLHVzZXJjZW50ZXJwdXRtYXAsdXNlcmNlbnRlcnBvc3RtYXAsdXNlcmNlbnRlcmdldGRhdGFzZXJ2aWNlLG1pc3Npb25jb250cm9sLHNzb3VzZXJjb250cm9sLHVzZXJjZW50ZXJkZWxldGVkYXRhc2VydmljZSx1c2VyY2VudGVycHV0ZGF0YXNlcnZpY2UsdXNlcmNlbnRlcnBvc3RkYXRhc2VydmljZSxzc29zY29wZWNvbnRyb2wscmVzb3VyY2UsaW5mb29yZGVybWFuYWdlLHNzb3Jlc291cmNlY29udHJvbCxpbmZvcG9ydGFsYmlnbmV3cyxpbmZvb3JkZXJhdHRhY2htZW50LGluZm9wb3J0YWxzY2hlZHVsZSxpbmZvcG9ydGFscG9zdHMsaW5mb3BvcnRhbG1lc3NhZ2UscmVwb3J0c2VydmVyLGluZm9wb3J0YWxuZXdzLGluZm9vcmRlcmxlYXZld29yZCxzc29hY2NvdW50Y29udHJvbCIsIm5vZGUiOiI3ZDcwNDhkYS01ODhmLTQ1ZGQtOTcxYy0xZjhhY2E1YTE0ZDUiLCJleHBzZWMiOi0xfQ.EGaMFQSkV-5t-NH96rlrSxtj5Xd12azU1J4NNBtaLUQ";
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaGFtYnVnZXJkZXZlbG9wIiwiYSI6ImNqNXJtZjF4ZzB3em4yd21pZmVqbHlleDAifQ.I9eqVjtotz7jaU7XcJm9pQ';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'http://localhost:8055/tdtVec.json',
+        center: [120.438, 29.431],
+        zoom: 7
+    });
+
+    var ZJGISLayerUrlVec = proxyUrlVec + "/{z}/{x}/{y}.pbf" + "?access_token=" + staticToken
+
+    // 不同类型都的数据渲染方式不同，图层的元信息可以通过下面接口获取到
+    // proxyUrlVec + "/tilestats" + "?access_token=" + staticToken
+    map.on("load", function () {
+        map.addLayer({
+            'id': 'xiaoxie',
+            'type': 'fill',	// 渲染方式根据原信息中的geometry字段值判断点可以用circle，线用line，面用file，下面都paint也要做响应的处理
+            'source': {
+                type: 'vector',
+                tiles: [ZJGISLayerUrlVec]
+                // url: ZJGISLayerUrlVec
+            },
+            'layout': {},
+            'paint': {
+                'fill-color': '#3388ff',
+                'fill-outline-color': '#3388ff'
+            },
+            'source-layer': 'zxcvzx' // 这个对应原信息里面都layer字段
+        });
+    })
+
+    // 点线面样式配置参考
+    // 点
+    /* {
+         'type': 'circle',
+         'paint': {
+             'circle-radius': 7,
+             'circle-color': '#3388ff'
+         }
+     } */
+
+    // 线
+    /* {
+     'type': 'line',
+     'paint': {
+         'line-width': 5,
+         'line-color': '#3388ff'
+     }
+   } */
+
+    // 面
+    /* {
+        'type': 'fill',
+        'paint': {
+           'fill-opacity': 0.5,
+           'fill-color': '#3388ff',
+           'fill-outline-color': '#3388ff'
+         }
+       } */
+</script>
+</body>
+</html>

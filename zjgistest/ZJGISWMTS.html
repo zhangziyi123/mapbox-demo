@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MapBox加载wmts地图服务</title>
+    <script src='http://map.zjditu.cn/vmap/static/mapbox-gl.js'></script>
+    <link href='http://map.zjditu.cn/vmap/static/mapbox-gl.css' rel='stylesheet'/>
+    <style>
+        body{ margin:0; padding:0; }
+        #map{ position:absolute; top:0; bottom:0; width:100%; }
+        /*隐藏logo*/
+        .mapboxgl-ctrl.mapboxgl-ctrl-attrib{
+            display:none !important;
+        }
+        .mapboxgl-ctrl-logo{
+            display:none !important;
+        }
+    </style>
+</head>
+<body>
+<div id='map'></div>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaGFtYnVnZXJkZXZlbG9wIiwiYSI6ImNqNXJtZjF4ZzB3em4yd21pZmVqbHlleDAifQ.I9eqVjtotz7jaU7XcJm9pQ'
+
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'http://localhost:8055/tdtVec.json',
+    center: [120.438, 29.431],
+    zoom: 7
+  })
+
+  var proxyUrlWMTS = 'http://112.124.97.99:8089/api/dynamic/4fee1484-5b65-4f01-9a93-60acc9fded37-lishihangpian2000/services/wmts/imgmap_ls1998-2003'
+  var staticToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOiI0ZmVlMTQ4NC01YjY1LTRmMDEtOWE5My02MGFjYzlmZGVkMzciLCJzY29wZSI6InVzZXJjZW50ZXJ0aGlyZC1wYXJ0eSx1c2VyY2VudGVycG9zdGRhdGEsdXNlcmNlbnRlcmdldGRhdGEsdXNlcmNlbnRlcmRlbGV0ZWRhdGEsdXNlcmNlbnRlcnB1dGRhdGEsc3Nvcm9sZWNvbnRyb2wsdXNlcmNlbnRlcmRlbGV0ZW1hcCx1c2VyY2VudGVyZ2V0bWFwLHVzZXJjZW50ZXJwdXRtYXAsdXNlcmNlbnRlcnBvc3RtYXAsdXNlcmNlbnRlcmdldGRhdGFzZXJ2aWNlLG1pc3Npb25jb250cm9sLHNzb3VzZXJjb250cm9sLHVzZXJjZW50ZXJkZWxldGVkYXRhc2VydmljZSx1c2VyY2VudGVycHV0ZGF0YXNlcnZpY2UsdXNlcmNlbnRlcnBvc3RkYXRhc2VydmljZSxzc29zY29wZWNvbnRyb2wscmVzb3VyY2UsaW5mb29yZGVybWFuYWdlLHNzb3Jlc291cmNlY29udHJvbCxpbmZvcG9ydGFsYmlnbmV3cyxpbmZvb3JkZXJhdHRhY2htZW50LGluZm9wb3J0YWxzY2hlZHVsZSxpbmZvcG9ydGFscG9zdHMsaW5mb3BvcnRhbG1lc3NhZ2UscmVwb3J0c2VydmVyLGluZm9wb3J0YWxuZXdzLGluZm9vcmRlcmxlYXZld29yZCxzc29hY2NvdW50Y29udHJvbCIsIm5vZGUiOiI3ZDcwNDhkYS01ODhmLTQ1ZGQtOTcxYy0xZjhhY2E1YTE0ZDUiLCJleHBzZWMiOi0xfQ.EGaMFQSkV-5t-NH96rlrSxtj5Xd12azU1J4NNBtaLUQ'
+  var dynamicToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyaWQiOiI0ZmVlMTQ4NC01YjY1LTRmMDEtOWE5My02MGFjYzlmZGVkMzciLCJzY29wZSI6InVzZXJjZW50ZXJ0aGlyZC1wYXJ0eSx1c2VyY2VudGVycG9zdGRhdGEsdXNlcmNlbnRlcmdldGRhdGEsdXNlcmNlbnRlcmRlbGV0ZWRhdGEsdXNlcmNlbnRlcnB1dGRhdGEsc3Nvcm9sZWNvbnRyb2wsdXNlcmNlbnRlcmRlbGV0ZW1hcCx1c2VyY2VudGVyZ2V0bWFwLHVzZXJjZW50ZXJwdXRtYXAsdXNlcmNlbnRlcnBvc3RtYXAsdXNlcmNlbnRlcmdldGRhdGFzZXJ2aWNlLG1pc3Npb25jb250cm9sLCxzc291c2VyY29udHJvbCx1c2VyY2VudGVyZGVsZXRlZGF0YXNlcnZpY2UsdXNlcmNlbnRlcnB1dGRhdGFzZXJ2aWNlLHVzZXJjZW50ZXJwb3N0ZGF0YXNlcnZpY2Usc3Nvc2NvcGVjb250cm9sLHJlc291cmNlLGluZm9vcmRlcm1hbmFnZSxzc29yZXNvdXJjZWNvbnRyb2wsaW5mb3BvcnRhbGJpZ25ld3MsaW5mb29yZGVyYXR0YWNobWVudCxpbmZvcG9ydGFsc2NoZWR1bGUsaW5mb3BvcnRhbHBvc3RzLGluZm9wb3J0YWxtZXNzYWdlLHJlcG9ydHNlcnZlcixpbmZvcG9ydGFsbmV3cyxpbmZvb3JkZXJsZWF2ZXdvcmQsc3NvYWNjb3VudGNvbnRyb2wiLCJub2RlIjoiN2Q3MDQ4ZGEtNTg4Zi00NWRkLTk3MWMtMWY4YWNhNWExNGQ1IiwiZXhwc2VjIjoyNTkyMDAwLCJpYXQiOjE1NjQ2NjUwODksImV4cCI6MTU2NzMwMDI4OX0.Rv2hHWcadz7HgMWGXcM7lRQtJQaRHLkSM3fRA938TME'
+
+  var ZJGISLayerUrlWMTS = proxyUrlWMTS
+    + '?layer=imgmap_ls1998-2003&style=default&tilematrixset=default028mm&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/jpgpng'
+    + '&TileMatrix={z}&TileCol={x}&TileRow={y}'
+    + '&access_token=' + staticToken
+
+  map.on('load', function () {
+    map.addLayer({
+      'id': 'ZJGISLayer',
+      'type': 'raster',	//wms图像输出
+      'source': {
+        'type': 'raster',
+        'tiles': [ZJGISLayerUrlWMTS],
+        'tileSize': 256
+      }
+    })
+  })
+</script>
+</body>
+</html>
